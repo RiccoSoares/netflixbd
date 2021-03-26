@@ -8,3 +8,11 @@ link do arquivo de mapeamento do ER para esquema relacional: https://docs.google
 
 link do ER: http://brmodelo.herokuapp.com/#!/conceptual/60577dbb17fea40033094732
 
+
+---------pra rodar (assumindo que voce ja criou uma database de nome netflix no seu postgres):
+psql -d netflix -a -f netflix.sql
+
+---------pra acessar a database no postgres
+sudo -i -u postgres
+psql netflix 
+\dt (checar as tabelas existentes)
