@@ -36,7 +36,16 @@ FOREIGN KEY(email_conta) REFERENCES CONTA(email));
 
 CREATE TABLE GENERO
 	(nome VARCHAR(30) NOT NULL,
-PRIMARY KEY (nome));
+PRIMARY KEY(nome));
+
+CREATE TABLE PERFIL_PREFERE
+	(email_perfil VARCHAR(254) NOT NULL,
+	nome_perfil VARCHAR(50) NOT NULL,
+	nome_genero VARCHAR(30) NOT NULL,
+	ordem NUMERIC(3) NOT NULL UNIQUE,
+PRIMARY KEY(email_perfil, nome_perfil, nome_genero),
+FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome));
+	
  
 CREATE TABLE DIRETOR
 	(nome VARCHAR(150) NOT NULL,
