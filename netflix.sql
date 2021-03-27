@@ -43,10 +43,11 @@ PRIMARY KEY (email));
 CREATE TABLE PERFIL
 	(email_conta VARCHAR(254) NOT NULL,
 	nome VARCHAR(50) NOT NULL,
-	imagem VARCHAR(255) NOT NULL,
+	imagem VARCHAR(255) NOT NULL, --endereco do arquivo de imagem
 	regiao VARCHAR(20),
 PRIMARY KEY(email_conta, nome),
-FOREIGN KEY(email_conta) REFERENCES CONTA(email));
+FOREIGN KEY(email_conta) REFERENCES CONTA(email),
+FOREIGN KEY(regiao) REFERENCES REGIAO(nome));
 
 CREATE TABLE GENERO
 	(nome VARCHAR(30) NOT NULL,
@@ -196,13 +197,25 @@ INSERT INTO REGIAO VALUES ('India');
 INSERT INTO REGIAO VALUES ('Japan');
 INSERT INTO REGIAO VALUES ('UK');
 
+INSERT INTO CONTA VALUES('rogerinho@videogames.com', 00, 0, 12345678910, 'ROGERIO V JOGOS', 1337, 1337, '5/13/2013', 'averdadeequeeunemjogo');
+INSERT INTO CONTA VALUES('pessoa@provedor.com', 01, 1, 31234284901, 'PESSOA D SILVA', 123123123, 232, '3/2/1999', 'senha');
+INSERT INTO CONTA VALUES('babyjones@bol.com.br', 01, 2, 11111111111, 'BEBE JONAS', 123124523, 123, '2/4/2050', 'lavanderia123');
+INSERT INTO CONTA VALUES('denishotmail@hotmail.com', 00, 1, 22222222222, 'DENIS H EMAIL', 190580981, 998, '8/12/2024', 'SENHAsenhaSENHA');
+
 INSERT INTO GENERO VALUES ('Terror');
 INSERT INTO GENERO VALUES ('Comedia');
 INSERT INTO GENERO VALUES ('Drama');
 INSERT INTO GENERO VALUES ('Comedia Romantica');
 INSERT INTO GENERO VALUES ('Suspense');
 INSERT INTO GENERO VALUES ('Horror Existencial');
-	
+
+INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'Roger', '001.jpg', 'UK');
+INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'Roger Infantil', '002.jpg', 'UK');
+INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'ROGER TRISTE', '003.jpg', 'UK');
+INSERT INTO PEFIL VALUES('babyjones@bol.com.br', 'Jonas', '004.jpg', 'Brazil');
+INSERT INTO PERFIL VALUES('babyjones@bol.com.br', 'Bebe do Jonas', '005.jpg', 'Brazil');
+INSERT INTO PERFIL VALUES('pessoa@provedor.com', 'Pessoa Generica', '006.jpg', 'India');
+INSERT INTO PERFIL VALUES('denishotmail@hotmail.com', 'DENIS', '007.jpg', 'Japan');
 
 SELECT * FROM REGIAO;
 SELECT * FROM CONTA;
