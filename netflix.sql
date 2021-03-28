@@ -47,7 +47,7 @@ CREATE TABLE PERFIL
 	regiao VARCHAR(20),
 PRIMARY KEY(email_conta, nome),
 FOREIGN KEY(email_conta) REFERENCES CONTA(email) ON DELETE CASCADE,
-FOREIGN KEY(regiao) REFERENCES REGIAO(nome)) ON DELETE SET NULL;
+FOREIGN KEY(regiao) REFERENCES REGIAO(nome) ON DELETE SET NULL);
 
 CREATE TABLE GENERO
 	(nome VARCHAR(30) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE PERFIL_PREFERE --preferencia do usuario por generos
 	ordem NUMERIC(3) NOT NULL,
 PRIMARY KEY(email_perfil, nome_perfil, nome_genero),
 FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome) ON DELETE CASCADE,
-FOREIGN KEY(nome_genero) REFERENCES GENERO(nome)) ON DELETE CASCADE;
+FOREIGN KEY(nome_genero) REFERENCES GENERO(nome) ON DELETE CASCADE);
  
 CREATE TABLE DIRETOR
 	(nome VARCHAR(150) NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE LEGENDA_AUDIO_FILMES --tabela que contem as opcoes de audio e legen
 	nome_arquivo VARCHAR(255) NOT NULL UNIQUE,
 PRIMARY KEY(id_filme, nome_arquivo),
 FOREIGN KEY(id_filme) REFERENCES FILMES(id_conteudo) ON DELETE CASCADE,
-FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo)) ON DELETE SET NULL; 
+FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo) ON DELETE SET NULL); 
 
 CREATE TABLE SERIES
 	(id_conteudo VARCHAR(30) NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE TEMPORADAS
 	(id_serie VARCHAR(30) NOT NULL,
 	numero NUMERIC(2) NOT NULL UNIQUE,
 PRIMARY KEY(id_serie, numero),
-FOREIGN KEY(id_serie) REFERENCES SERIES(id_conteudo)) ON DELETE CASCADE;
+FOREIGN KEY(id_serie) REFERENCES SERIES(id_conteudo) ON DELETE CASCADE);
 
 CREATE TABLE EPISODIOS
 	(id_temporada VARCHAR(30) NOT NULL,
@@ -119,7 +119,7 @@ CREATE TABLE EPISODIOS
 	nome VARCHAR(100),
 	arquivo VARCHAR(255) NOT NULL,	
 PRIMARY KEY(id_temporada, numero_temporada, numero),
-FOREIGN KEY(id_temporada, numero_temporada) REFERENCES TEMPORADAS(id_serie, numero)) ON DELETE CASCADE;
+FOREIGN KEY(id_temporada, numero_temporada) REFERENCES TEMPORADAS(id_serie, numero) ON DELETE CASCADE);
 
 CREATE TABLE LEGENDA_AUDIO_EPISODIOS --tabela que contem as opceos de audio e legenda para os episodios de series
 	(id_temporada VARCHAR(30) NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE LEGENDA_AUDIO_EPISODIOS --tabela que contem as opceos de audio e le
 	nome_arquivo VARCHAR(255) NOT NULL UNIQUE,
 PRIMARY KEY(id_temporada, numero_temporada, numero_episodio, nome_arquivo),
 FOREIGN KEY(id_temporada, numero_temporada, numero_episodio) REFERENCES EPISODIOS(id_temporada, numero_temporada, numero) ON DELETE CASCADE,
-FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo)) ON DELETE CASCADE;
+FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo) ON DELETE CASCADE);
 
 CREATE TABLE LISTA_PERFIL --lista de conteudos ("para ver depois") de um perfil
 	(email_perfil VARCHAR(254) NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE LISTA_PERFIL --lista de conteudos ("para ver depois") de um perfil
 	id_conteudo VARCHAR(30) NOT NULL,
 PRIMARY KEY(email_perfil, nome_perfil, id_conteudo),
 FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome) ON DELETE CASCADE,
-FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id)) ON DELETE CASCADE;
+FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) ON DELETE CASCADE);
 
 CREATE TABLE MOTIVO_RECOMENDACAO --tabela de motivos pre-especificados pelos quais um conteudo pode ser recomendado a um usuario
 	(motivo VARCHAR(50) NOT NULL,
@@ -149,7 +149,7 @@ CREATE TABLE RECOMENDACOES_PERFIL --tabela de conteudos recomendados especificam
 	motivo VARCHAR(30) NOT NULL,
 PRIMARY KEY(email_perfil, nome_perfil, id_conteudo),
 FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome) ON DELETE CASCADE,
-FOREIGN KEY(motivo) REFERENCES MOTIVO_RECOMENDACAO(motivo)) ON DELETE CASCADE;
+FOREIGN KEY(motivo) REFERENCES MOTIVO_RECOMENDACAO(motivo) ON DELETE CASCADE);
 	
 CREATE TABLE DISPONIVEL_PARA --disponibilidade de obra em regioes
 	(conteudo_id VARCHAR(30) NOT NULL,
@@ -189,7 +189,7 @@ CREATE TABLE ASSISTIR
 	no_tempo NUMERIC(4),
 	relevancia NUMERIC(100),
 PRIMARY KEY(email_conta, perfil, conteudo_id),
-FOREIGN KEY(email_conta, perfil) REFERENCES CONTA(email, nome) ON DELETE CASCADE,
+FOREIGN KEY(email_conta, perfil) REFERENCES PERFIL(email_conta, nome) ON DELETE CASCADE,
 FOREIGN KEY(conteudo_id) REFERENCES CONTEUDO(id) ON DELETE CASCADE);
 	
 	
