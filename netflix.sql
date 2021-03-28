@@ -104,7 +104,7 @@ CREATE TABLE EPISODIOS
 	numero_temporada NUMERIC(2) NOT NULL,
 	numero NUMERIC(2) NOT NULL,
 	sinopse VARCHAR(400) NOT NULL,
-	thumbnail VARCHAR(280) NOT NULL,
+	thumbnail VARCHAR(255) NOT NULL,
 	nome VARCHAR(100),
 	arquivo VARCHAR(255) NOT NULL,	
 PRIMARY KEY(id_temporada, numero_temporada, numero),
@@ -281,7 +281,11 @@ INSERT INTO TEMPORADAS VALUES('003', 4);
 INSERT INTO TEMPORADAS VALUES('004', 3);
 INSERT INTO TEMPORADAS VALUES('003', 5);
 
---INSERT INTO EPISODIOS VALUES(
+INSERT INTO EPISODIOS VALUES('003', 1, 1, 'A trama comeca', 'thumb1.jpg', 'O Inicio', '0031ep1.mp4');
+INSERT INTO EPISODIOS VALUES('003', 1, 2, 'A trama continua', 'thumb2.jpg', 'A parte 2', '0031ep2.mp4');
+INSERT INTO EPISODIOS VALUES('003', 1, 3, 'Jane toma uma decisao questionavel', 'thumb3.jpg', 'A Decisao', '0031ep3.mp4');
+INSERT INTO EPISODIOS VALUES('003', 2, 1, 'A trama insiste em continuar', 'thumb4.jpg', 'A Nova Parte 2', '0032ep1.mp4');
+INSERT INTO EPISODIOS VALUES('003', 2, 2, 'Apos o fim do orcamento, a protagonista precisa resolver tudo logo', 'thumb5.jpg', 'O fim', '0032ep2.mp4');
 
 INSERT INTO AUDIO_LEGENDA VALUES('001.srt', 'portugues', 'legenda');
 INSERT INTO AUDIO_LEGENDA VALUES('002.srt', 'ingles', 'legenda');
