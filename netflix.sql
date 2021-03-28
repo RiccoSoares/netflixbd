@@ -41,7 +41,7 @@ PRIMARY KEY (email));
 CREATE TABLE PERFIL
 	(email_conta VARCHAR(254) NOT NULL,
 	nome VARCHAR(50) NOT NULL,
-	imagem VARCHAR(255) NOT NULL, --endereco do arquivo de imagem
+	imagem VARCHAR(255) NOT NULL UNIQUE, --endereco do arquivo de imagem
 	regiao VARCHAR(20),
 PRIMARY KEY(email_conta, nome),
 FOREIGN KEY(email_conta) REFERENCES CONTA(email) ON DELETE CASCADE,
@@ -78,6 +78,7 @@ CREATE TABLE CONTEUDO
 	visu INT NOT NULL,
 	original BOOLEAN NOT NULL,
 	tipo VARCHAR(5) NOT NULL,--tipicamente 'serie' ou 'filme'
+	arquivo VARCHAR(255) UNIQUE, --apenas filmes tem caminho pra arquivo.
 PRIMARY KEY (id));
 
 CREATE TABLE AUDIO_LEGENDA --tabela contendo arquivos de audio ou de legenda no banco de dados
@@ -106,7 +107,7 @@ CREATE TABLE EPISODIOS
 	sinopse VARCHAR(400) NOT NULL,
 	thumbnail VARCHAR(255) NOT NULL,
 	nome VARCHAR(100),
-	arquivo VARCHAR(255) NOT NULL,	
+	arquivo VARCHAR(255) NOT NULL UNIQUE,	
 PRIMARY KEY(id_temporada, numero_temporada, numero),
 FOREIGN KEY(id_temporada, numero_temporada) REFERENCES TEMPORADAS(id_serie, numero) ON DELETE CASCADE);
 
@@ -233,13 +234,14 @@ INSERT INTO ATOR VALUES('Ator 3');
 INSERT INTO ATOR VALUES('Ator 4');
 INSERT INTO ATOR VALUES('Ator Querido da Netflix');
 
-INSERT INTO CONTEUDO VALUES('001', 'O Grito', 2004, 'Casa amaldicoada e etc', 'poster01.jpg', 16, 3400, false, 'filme');
-INSERT INTO CONTEUDO VALUES('002', 'Filme Generico Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre', 'poster02.jpg', 14, 1000000000, true, 'filme');
-INSERT INTO CONTEUDO VALUES('003', 'Serie Generica Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre, so que serie', 'poster03.jpg', 16, 900000, true, 'serie');
-INSERT INTO CONTEUDO VALUES('004', 'Serie de Temporadas Curtas', 2015, 'Situacoes dramaticas que se resolvem rapidamente, ate que uma nova temporada seja lancada','poster04.jpg', 16, 500000, false, 'serie');
-INSERT INTO CONTEUDO VALUES('005', 'Serie de Hospital', 2016, 'Nao sei sobre o que fala, mas muita gente ve', 'poster05.jpg', 12, 1000000, false, 'serie');
-INSERT INTO CONTEUDO VALUES('006', 'Coragem, o Cao Covarde', 1996, 'Tira o sono de criancas', 'poster06.jpg', 90, 4000, false, 'filme');
-INSERT INTO CONTEUDO VALUES('007', 'Peixonauta o filme', 2020, '???', 'poster07.jpg', 0, 5999, false, 'filme');
+INSERT INTO CONTEUDO VALUES('001', 'O Grito', 2004, 'Casa amaldicoada e etc', 'poster01.jpg', 16, 3400, false, 'filme', 'arqfilme1.mp4');
+INSERT INTO CONTEUDO VALUES('002', 'Filme Generico Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre', 'poster02.jpg', 14, 1000000000, true, 'filme', 'arqfilme2.mp4');
+INSERT INTO CONTEUDO VALUES('003', 'Serie Generica Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre, so que serie', 'poster03.jpg', 16, 900000, true, 'serie', NULL);
+INSERT INTO CONTEUDO VALUES('004', 'Serie de Temporadas Curtas', 2015, 'Situacoes dramaticas que se resolvem rapidamente, ate que uma nova temporada seja lancada','poster04.jpg', 16, 500000, false, 'serie', NULL);
+INSERT INTO CONTEUDO VALUES('005', 'Serie de Hospital', 2016, 'Nao sei sobre o que fala, mas muita gente ve', 'poster05.jpg', 12, 1000000, false, 'serie', NULL);
+INSERT INTO CONTEUDO VALUES('006', 'Coragem, o Cao Covarde', 1996, 'Tira o sono de criancas', 'poster06.jpg', 90, 4000, false, 'filme', 'arqfilme3.mp4');
+INSERT INTO CONTEUDO VALUES('007', 'Peixonauta o filme', 2020, '???', 'poster07.jpg', 0, 5999, false, 'filme', 'arqfilme5.mp4');
+--INSERT INTO CONTEUDO VALUES('008', 'Velozes e Furiosos Tokyo', 2008, 'Ruim como os outros mas traz nostalgia', 'poster08.jpg', 14, false, 'filme', 'arqfilme6.mp4');
 
 INSERT INTO DO_GENERO VALUES('001', 'Terror');
 INSERT INTO DO_GENERO VALUES('002', 'Comedia Romantica');
@@ -253,6 +255,7 @@ INSERT INTO DO_GENERO VALUES('005', 'Suspense');
 INSERT INTO DO_GENERO VALUES('006', 'Horror Existencial');
 INSERT INTO DO_GENERO VALUES('006', 'Terror');
 INSERT INTO DO_GENERO VALUES('007', 'Comedia');
+INSERT INTO DO_GENERO VALUES('007', 'Horror Existencial');
 
 INSERT INTO DIRIGIDO_POR VALUES('001', 'Diretor 1');
 INSERT INTO DIRIGIDO_POR VALUES('002', 'Bong Joon-ho');
@@ -286,6 +289,15 @@ INSERT INTO EPISODIOS VALUES('003', 1, 2, 'A trama continua', 'thumb2.jpg', 'A p
 INSERT INTO EPISODIOS VALUES('003', 1, 3, 'Jane toma uma decisao questionavel', 'thumb3.jpg', 'A Decisao', '0031ep3.mp4');
 INSERT INTO EPISODIOS VALUES('003', 2, 1, 'A trama insiste em continuar', 'thumb4.jpg', 'A Nova Parte 2', '0032ep1.mp4');
 INSERT INTO EPISODIOS VALUES('003', 2, 2, 'Apos o fim do orcamento, a protagonista precisa resolver tudo logo', 'thumb5.jpg', 'O fim', '0032ep2.mp4');
+INSERT INTO EPISODIOS VALUES('003', 3, 1, 'Conseguiram novos investidores, serie continua', 'thumb5123.jpg', 'O comeco da continuacao', '0033ep1.mp4');
+INSERT INTO EPISODIOS VALUES('003', 4, 1, 'Jane esta confusa, assim como o telespectador', 'thumb124.jpg', 'A confusao', '0034ep1.mp4');
+INSERT INTO EPISODIOS VALUES('003', 4, 2, 'Jane morre e vc recebeu spoiler', 'thumb12451.jpg', 'Tudo acaba', '0034ep2.mp4');
+INSERT INTO EPISODIOS VALUES('003', 5, 1, 'Jane ressucita em uma ultima tentativa de continuar com o que deveria ter acabado', 'thumb18237.jpg', 'Prolongado Como Sempre', '0035ep1.mp4');
+INSERT INTO EPISODIOS VALUES('003', 5, 2, 'Ninguem aguenta mais', 'thumb9912.jpg', 'Agora vai', '0035ep2.mp4');
+INSERT INTO EPISODIOS VALUES('004', 1, 1, 'Kevin mostra ser um garoto estranho', 'thumb6.jpg', 'Kevin', '0041ep1.mp4');
+INSERT INTO EPISODIOS VALUES('004', 2, 1, 'Kevin mostra segue sendo estranho', 'thumb7.jpg', 'Kevin', '0042ep1.mp4');
+INSERT INTO EPISODIOS VALUES('004', 3, 1, 'Kevin deixa de ser estranho', 'thumb8.jpg', 'Kevin', '0043ep1.mp4');
+INSERT INTO EPISODIOS VALUES('005', 1, 1, 'Finjamos que essa faliu', 'thumb91240.jpg', 'Nao Deu', '0051ep1.mp4');
 
 INSERT INTO AUDIO_LEGENDA VALUES('001.srt', 'portugues', 'legenda');
 INSERT INTO AUDIO_LEGENDA VALUES('002.srt', 'ingles', 'legenda');
@@ -305,6 +317,25 @@ INSERT INTO AUDIO_LEGENDA VALUES('006.mp3', 'portugues', 'audio');
 INSERT INTO AUDIO_LEGENDA VALUES('007.mp3', 'ingles', 'audio');
 INSERT INTO AUDIO_LEGENDA VALUES('008.mp3', 'ingles', 'audio');
 INSERT INTO AUDIO_LEGENDA VALUES('009.mp3', 'japones', 'audio');
+
+INSERT INTO DISPONIVEL_PARA VALUES('001', 'Brazil');
+INSERT INTO DISPONIVEL_PARA VALUES('002', 'Brazil');
+INSERT INTO DISPONIVEL_PARA VALUES('003', 'Brazil');
+INSERT INTO DISPONIVEL_PARA VALUES('004', 'Brazil');
+INSERT INTO DISPONIVEL_PARA VALUES('005', 'India');
+INSERT INTO DISPONIVEL_PARA VALUES('006', 'India');
+INSERT INTO DISPONIVEL_PARA VALUES('007', 'India');
+INSERT INTO DISPONIVEL_PARA VALUES('001', 'Japan');
+INSERT INTO DISPONIVEL_PARA VALUES('002', 'Japan');
+INSERT INTO DISPONIVEL_PARA VALUES('003', 'Japan');
+INSERT INTO DISPONIVEL_PARA VALUES('004', 'Japan');
+INSERT INTO DISPONIVEL_PARA VALUES('005', 'Japan');
+INSERT INTO DISPONIVEL_PARA VALUES('006', 'Japan');
+INSERT INTO DISPONIVEL_PARA VALUES('007', 'Japan');
+INSERT INTO DISPONIVEL_PARA VALUES('001', 'UK');
+INSERT INTO DISPONIVEL_PARA VALUES('005', 'UK');
+INSERT INTO DISPONIVEL_PARA VALUES('006', 'UK');
+INSERT INTO DISPONIVEL_PARA VALUES('007', 'UK');
 
 INSERT INTO MOTIVO_RECOMENDACAO VALUES('Diretor');
 INSERT INTO MOTIVO_RECOMENDACAO VALUES('Ator');
