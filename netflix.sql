@@ -79,12 +79,14 @@ CREATE TABLE CONTEUDO
 	original BOOLEAN NOT NULL,
 	tipo VARCHAR(5) NOT NULL,--tipicamente 'serie' ou 'filme'
 	arquivo VARCHAR(255) UNIQUE, --apenas filmes tem caminho pra arquivo.
+CONSTRAINT chck_type CHECK(tipo IN('serie', 'filme')),
 PRIMARY KEY (id));
 
 CREATE TABLE AUDIO_LEGENDA --tabela contendo arquivos de audio ou de legenda no banco de dados
 	(arquivo VARCHAR(255) NOT NULL UNIQUE, --caminho do arquivo
 	idioma VARCHAR(30) NOT NULL,
 	descricao VARCHAR(10) NOT NULL, --tipicacamente 'audio' ou 'legenda'
+CONSTRAINT chck_desc CHECK(descricao IN('audio', 'legenda')),
 PRIMARY KEY(arquivo, descricao));
 
 CREATE TABLE LEGENDA_AUDIO_FILMES --tabela que contem as opcoes de audio e legenda para os filmes
@@ -178,6 +180,7 @@ CREATE TABLE ASSISTIR
 	ultimo_ep_visto CHAR(6),
 	no_tempo NUMERIC(4),
 	relevancia NUMERIC(100),
+CONSTRAINT chck_feedback CHECK( feedback IN ('positivo', 'negativo')),
 PRIMARY KEY(email_conta, perfil, conteudo_id),
 FOREIGN KEY(email_conta, perfil) REFERENCES PERFIL(email_conta, nome) ON DELETE CASCADE,
 FOREIGN KEY(conteudo_id) REFERENCES CONTEUDO(id) ON DELETE CASCADE);
