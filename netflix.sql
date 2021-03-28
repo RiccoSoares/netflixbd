@@ -198,10 +198,10 @@ INSERT INTO REGIAO VALUES ('India');
 INSERT INTO REGIAO VALUES ('Japan');
 INSERT INTO REGIAO VALUES ('UK');
 
-INSERT INTO CONTA VALUES('rogerinho@videogames.com', 00, 0, 12345678910, 'ROGERIO V JOGOS', 1337, 1337, '5/13/2013', '9123dcbb0b42652b0e105956c68d3ca2ff34584f324fa41a29aedd32b883e131');
-INSERT INTO CONTA VALUES('pessoa@provedor.com', 01, 1, 31234284901, 'PESSOA D SILVA', 123123123, 232, '3/2/1999', '9AD46806888CEB90824DDC36AFC7D4448B4252123491AB8DE16A3A117F303191');
-INSERT INTO CONTA VALUES('babyjones@bol.com.br', 01, 2, 11111111111, 'BEBE JONAS', 123124523, 123, '2/4/2050', '56CC8917D573A6E3530B8C0F7E1CD91131679BC9988A05BBE3301ADDB3B8B9E9');
-INSERT INTO CONTA VALUES('denishotmail@hotmail.com', 00, 1, 22222222222, 'DENIS H EMAIL', 190580981, 998, '8/12/2024', '629F700087CEC1A358BEE948511789C3AA491AD26EFF7963A576F086AEB360F8');
+INSERT INTO CONTA VALUES('rogerinho@videogames.com', 00, 0, 12345678910, 'ROGERIO V JOGOS', 1337, 1337, '5/13/2013', 'averdadeequeeunemjogo');
+INSERT INTO CONTA VALUES('pessoa@provedor.com', 01, 1, 31234284901, 'PESSOA D SILVA', 123123123, 232, '3/2/1999', 'senha');
+INSERT INTO CONTA VALUES('babyjones@bol.com.br', 01, 2, 11111111111, 'BEBE JONAS', 123124523, 123, '2/4/2050', 'lavanderia123');
+INSERT INTO CONTA VALUES('denishotmail@hotmail.com', 00, 1, 22222222222, 'DENIS H EMAIL', 190580981, 998, '8/12/2024', 'SENHAsenhaSENHA');
 
 INSERT INTO GENERO VALUES ('Terror');
 INSERT INTO GENERO VALUES ('Comedia');
@@ -213,10 +213,44 @@ INSERT INTO GENERO VALUES ('Horror Existencial');
 INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'Roger', '001.jpg', 'UK');
 INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'Roger Infantil', '002.jpg', 'UK');
 INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'ROGER TRISTE', '003.jpg', 'UK');
-INSERT INTO PERFIL VALUES('babyjones@bol.com.br', 'Jonas', '004.jpg', 'Brazil');
+INSERT INTO PEFIL VALUES('babyjones@bol.com.br', 'Jonas', '004.jpg', 'Brazil');
 INSERT INTO PERFIL VALUES('babyjones@bol.com.br', 'Bebe do Jonas', '005.jpg', 'Brazil');
 INSERT INTO PERFIL VALUES('pessoa@provedor.com', 'Pessoa Generica', '006.jpg', 'India');
 INSERT INTO PERFIL VALUES('denishotmail@hotmail.com', 'DENIS', '007.jpg', 'Japan');
+
+INSERT INTO PERFIL_PREFERE VALUES('rogerinho@videogames.com', 'Roger Infantil', 'Comedia', 1);
+INSERT INTO PERFIL_PREFERE VALUES('rogerinho@videogames.com', 'ROGER TRISTE', 'Horror Existencial', 1);
+INSERT INTO PERFIL_PREFERE VALUES('rogerinho@videogames.com', 'ROGER TRISTE', 'Terror', 2);
+INSERT INTO PERFIL_PREFERE VALUES('rogerinho@videogames.com', 'ROGER TRISTE', 'Suspense', 3);
+INSERT INTO PERFIL_PREFERE VALUES('babyjones@bol.com.br', 'Bebe do Jonas', 'Comedia', 1);
+INSERT INTO PERFIL_PREFERE VALUES('babyjones@bol.com.br', 'Bebe do Jonas', 'Comedia Romantica', 2);
+INSERT INTO PERFIL_PREFERE VALUES('babyjones@bol.com.br', 'Jonas', 'Suspense', 1);
+INSERT INTO PERFIL_PREFERE VALUES('babyjones@bol.com.br', 'Jonas', 'Comedia', 2);
+INSERT INTO PERFIL_PREFERE VALUES('pessoa@provedor.com', 'Pessoa Generica', 'Comedia Romantica', 1);
+INSERT INTO PERFIL_PREFERE VALUES('pessoa@provedor.com', 'Pessoa Generica', 'Comedia', 2);
+INSERT INTO PERFIL_PREFERE VALUES('denishotmail@hotmail.com', 'DENIS', 'Terror', 1);
+INSERT INTO PERFIL_PREFERE VALUES('denishotmail@hotmail.com', 'DENIS', 'Horror Existencial', 2);
+INSERT INTO PERFIL_PREFERE VALUES('denishotmail@hotmail.com', 'DENIS', 'Suspense', 3);
+
+INSERT INTO DIRETOR VALUES('Bong Joon-ho');
+INSERT INTO DIRETOR VALUES('Diretor 1');
+INSERT INTO DIRETOR VALUES('Diretor 2');
+INSERT INTO DIRETOR VALUES('Diretor 3');
+INSERT INTO DIRETOR VALUES('Diretor 4');
+
+INSERT INTO ATOR VALUES('Ator 1');
+INSERT INTO ATOR VALUES('Ator 2');
+INSERT INTO ATOR VALUES('Ator 3');
+INSERT INTO ATOR VALUES('Ator 4');
+
+INSERT INTO CONTEUDO VALUES('001', 'O Grito', 2004, 'Casa amaldicoada e etc', 'poster01.jpg', 16, 3400, false);
+INSERT INTO CONTEUDO VALUES('002', 'Filme Generico Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre', 'poster02.jpg', 14, 1000000000, true);
+INSERT INTO CONTEUDO VALUES('003', 'Serie Generica Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre, so que serie', 'poster03.jpg', 16, 900000, true);
+INSERT INTO CONTEUDO VALUES('004', 'Serie de Temporadas Curtas', 2015, 'Situacoes dramaticas que se resolvem rapidamente, ate que uma nova temporada seja lancada','poster04.jpg', 16, 500000, false);
+INSERT INTO CONTEUDO VALUES('005', 'Serie de Hospital', 2016, 'Nao sei sobre o que fala, mas muita gente ve', 'poster05.jpg', 12, 1000000, false);
+INSERT INTO CONTEUDO VALUES('006', 'Coragem, o Cao Covarde', 1996, 'Tira o sono de criancas', 'poster06.jpg', 90, 4000, false);
+INSERT INTO CONTEUDO VALUES('007', 'Peixonauta o filme', 2020, '???', 'poster07.jpg', 0, 5999, false);
+
 
 SELECT * FROM REGIAO;
 SELECT * FROM CONTA;
