@@ -41,7 +41,7 @@ PRIMARY KEY (email));
 CREATE TABLE PERFIL
 	(email_conta VARCHAR(254) NOT NULL,
 	nome VARCHAR(50) NOT NULL,
-	imagem VARCHAR(255) NOT NULL UNIQUE, --endereco do arquivo de imagem
+	imagem VARCHAR(255) NOT NULL, --endereco do arquivo de imagem
 	regiao VARCHAR(20),
 PRIMARY KEY(email_conta, nome),
 FOREIGN KEY(email_conta) REFERENCES CONTA(email) ON DELETE CASCADE,
@@ -369,13 +369,20 @@ INSERT INTO MOTIVO_RECOMENDACAO VALUES('Ator');
 INSERT INTO MOTIVO_RECOMENDACAO VALUES('Genero');
 INSERT INTO MOTIVO_RECOMENDACAO VALUES('Numero de Visualizacoes');
 INSERT INTO MOTIVO_RECOMENDACAO VALUES('Relevancia');
-INSERT INTO MOTIVO_RECOMENDACAO VALUES('Em alta na regiao');
-
+INSERT INTO MOTIVO_RECOMENDACAO VALUES('Em Alta na Regiao');
+INSERT INTO MOTIVO_RECOMENDACAO VALUES('Ator em Alta');
 
 INSERT INTO ASSISTIR VALUES('denishotmail@hotmail.com', 'DENIS', '001', true, 'positivo', NULL, NULL, 95); 
 INSERT INTO ASSISTIR VALUES('denishotmail@hotmail.com', 'DENIS', '007', false, 'negativo', NULL, NULL, 69); 
 INSERT INTO ASSISTIR VALUES('rogerinho@videogames.com', 'ROGER TRISTE', '006', true, 'positivo', NULL, NULL, 80); 
-INSERT INTO ASSISTIR VALUES('pessoa@provedor.com', 'Pessoa Generica', '004', false, NULL, 's03e01', 13, 75); 
+INSERT INTO ASSISTIR VALUES('pessoa@provedor.com', 'Pessoa Generica', '004', false, NULL, 's03e01', 13, 75);
+INSERT INTO ASSISTIR VALUES('babyjones@bol.com.br', 'Jonas', '003', true, NULL, NULL, NULL, 80); 
+
+INSERT INTO RECOMENDACOES_PERFIL VALUES('denishotmail@hotmail.com', 'DENIS', '006', 'Genero');
+INSERT INTO RECOMENDACOES_PERFIL VALUES('denishotmail@hotmail.com', 'DENIS', '002', 'Em Alta na Regiao');
+INSERT INTO RECOMENDACOES_PERFIL VALUES('rogerinho@videogames.com', 'ROGER TRISTE', '001', 'Genero');
+INSERT INTO RECOMENDACOES_PERFIL VALUES('babyjones@bol.com.br', 'Jonas', '002', 'Ator'); 
+
 
 
 SELECT * FROM REGIAO;
