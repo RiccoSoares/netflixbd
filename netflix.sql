@@ -46,8 +46,8 @@ CREATE TABLE PERFIL
 	imagem VARCHAR(255) NOT NULL, --endereco do arquivo de imagem
 	regiao VARCHAR(20),
 PRIMARY KEY(email_conta, nome),
-FOREIGN KEY(email_conta) REFERENCES CONTA(email),
-FOREIGN KEY(regiao) REFERENCES REGIAO(nome));
+FOREIGN KEY(email_conta) REFERENCES CONTA(email) ON DELETE CASCADE,
+FOREIGN KEY(regiao) REFERENCES REGIAO(nome)) ON DELETE SET NULL;
 
 CREATE TABLE GENERO
 	(nome VARCHAR(30) NOT NULL,
@@ -57,10 +57,10 @@ CREATE TABLE PERFIL_PREFERE --preferencia do usuario por generos
 	(email_perfil VARCHAR(254) NOT NULL,
 	nome_perfil VARCHAR(50) NOT NULL,
 	nome_genero VARCHAR(30) NOT NULL,
-	ordem NUMERIC(3) NOT NULL UNIQUE,
+	ordem NUMERIC(3) NOT NULL,
 PRIMARY KEY(email_perfil, nome_perfil, nome_genero),
-FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome),
-FOREIGN KEY(nome_genero) REFERENCES GENERO(nome));
+FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome) ON DELETE CASCADE,
+FOREIGN KEY(nome_genero) REFERENCES GENERO(nome)) ON DELETE CASCADE;
  
 CREATE TABLE DIRETOR
 	(nome VARCHAR(150) NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE CONTEUDO
 	nome VARCHAR(150) NOT NULL,
 	ano NUMERIC(4) NOT NULL,
 	sinopse VARCHAR(400) NOT NULL,
-	poster NUMERIC(5) NOT NULL UNIQUE,
+	poster VARCHAR(255) NOT NULL UNIQUE,
 	ci NUMERIC(2) NOT NULL,
 	visu INT NOT NULL,
 	original BOOLEAN NOT NULL,
@@ -96,8 +96,8 @@ CREATE TABLE LEGENDA_AUDIO_FILMES --tabela que contem as opcoes de audio e legen
 	(id_filme VARCHAR(30) NOT NULL,
 	nome_arquivo VARCHAR(255) NOT NULL UNIQUE,
 PRIMARY KEY(id_filme, nome_arquivo),
-FOREIGN KEY(id_filme) REFERENCES FILMES(id_conteudo),
-FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo)); 
+FOREIGN KEY(id_filme) REFERENCES FILMES(id_conteudo) ON DELETE CASCADE,
+FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo)) ON DELETE SET NULL; 
 
 CREATE TABLE SERIES
 	(id_conteudo VARCHAR(30) NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE TEMPORADAS
 	(id_serie VARCHAR(30) NOT NULL,
 	numero NUMERIC(2) NOT NULL UNIQUE,
 PRIMARY KEY(id_serie, numero),
-FOREIGN KEY(id_serie) REFERENCES SERIES(id_conteudo));
+FOREIGN KEY(id_serie) REFERENCES SERIES(id_conteudo)) ON DELETE CASCADE;
 
 CREATE TABLE EPISODIOS
 	(id_temporada VARCHAR(30) NOT NULL,
@@ -119,7 +119,7 @@ CREATE TABLE EPISODIOS
 	nome VARCHAR(100),
 	arquivo VARCHAR(255) NOT NULL,	
 PRIMARY KEY(id_temporada, numero_temporada, numero),
-FOREIGN KEY(id_temporada, numero_temporada) REFERENCES TEMPORADAS(id_serie, numero));
+FOREIGN KEY(id_temporada, numero_temporada) REFERENCES TEMPORADAS(id_serie, numero)) ON DELETE CASCADE;
 
 CREATE TABLE LEGENDA_AUDIO_EPISODIOS --tabela que contem as opceos de audio e legenda para os episodios de series
 	(id_temporada VARCHAR(30) NOT NULL,
@@ -127,16 +127,16 @@ CREATE TABLE LEGENDA_AUDIO_EPISODIOS --tabela que contem as opceos de audio e le
 	numero_episodio NUMERIC(2) NOT NULL,
 	nome_arquivo VARCHAR(255) NOT NULL UNIQUE,
 PRIMARY KEY(id_temporada, numero_temporada, numero_episodio, nome_arquivo),
-FOREIGN KEY(id_temporada, numero_temporada, numero_episodio) REFERENCES EPISODIOS(id_temporada, numero_temporada, numero),
-FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo));
+FOREIGN KEY(id_temporada, numero_temporada, numero_episodio) REFERENCES EPISODIOS(id_temporada, numero_temporada, numero) ON DELETE CASCADE,
+FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo)) ON DELETE CASCADE;
 
 CREATE TABLE LISTA_PERFIL --lista de conteudos ("para ver depois") de um perfil
 	(email_perfil VARCHAR(254) NOT NULL,
 	nome_perfil VARCHAR(50) NOT NULL,
 	id_conteudo VARCHAR(30) NOT NULL,
 PRIMARY KEY(email_perfil, nome_perfil, id_conteudo),
-FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome),
-FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id));
+FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome) ON DELETE CASCADE,
+FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id)) ON DELETE CASCADE;
 
 CREATE TABLE MOTIVO_RECOMENDACAO --tabela de motivos pre-especificados pelos quais um conteudo pode ser recomendado a um usuario
 	(motivo VARCHAR(50) NOT NULL,
@@ -148,8 +148,8 @@ CREATE TABLE RECOMENDACOES_PERFIL --tabela de conteudos recomendados especificam
 	id_conteudo VARCHAR(30) NOT NULL,
 	motivo VARCHAR(30) NOT NULL,
 PRIMARY KEY(email_perfil, nome_perfil, id_conteudo),
-FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome),
-FOREIGN KEY(motivo) REFERENCES MOTIVO_RECOMENDACAO(motivo));
+FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome) ON DELETE CASCADE,
+FOREIGN KEY(motivo) REFERENCES MOTIVO_RECOMENDACAO(motivo)) ON DELETE CASCADE;
 	
 CREATE TABLE DISPONIVEL_PARA --disponibilidade de obra em regioes
 	(conteudo_id VARCHAR(30) NOT NULL,
@@ -181,14 +181,15 @@ FOREIGN KEY(nome_diretor) REFERENCES DIRETOR(nome) ON DELETE CASCADE);
 	
 CREATE TABLE ASSISTIR 
 	(email_conta VARCHAR(254) NOT NULL,
+	perfil	VARCHAR(50) NOT NULL,
 	conteudo_id VARCHAR(30) NOT NULL,
 	assitido_comp BOOLEAN NOT NULL,
 	feedback CHAR(8),
 	ultimo_ep_visto CHAR(6),
 	no_tempo NUMERIC(4),
 	relevancia NUMERIC(100),
-PRIMARY KEY(email_conta, conteudo_id),
-FOREIGN KEY(email_conta) REFERENCES CONTA(email) ON DELETE CASCADE,
+PRIMARY KEY(email_conta, perfil, conteudo_id),
+FOREIGN KEY(email_conta, perfil) REFERENCES CONTA(email, nome) ON DELETE CASCADE,
 FOREIGN KEY(conteudo_id) REFERENCES CONTEUDO(id) ON DELETE CASCADE);
 	
 	
@@ -197,10 +198,10 @@ INSERT INTO REGIAO VALUES ('India');
 INSERT INTO REGIAO VALUES ('Japan');
 INSERT INTO REGIAO VALUES ('UK');
 
-INSERT INTO CONTA VALUES('rogerinho@videogames.com', 00, 0, 12345678910, 'ROGERIO V JOGOS', 1337, 1337, '5/13/2013', 'averdadeequeeunemjogo');
-INSERT INTO CONTA VALUES('pessoa@provedor.com', 01, 1, 31234284901, 'PESSOA D SILVA', 123123123, 232, '3/2/1999', 'senha');
-INSERT INTO CONTA VALUES('babyjones@bol.com.br', 01, 2, 11111111111, 'BEBE JONAS', 123124523, 123, '2/4/2050', 'lavanderia123');
-INSERT INTO CONTA VALUES('denishotmail@hotmail.com', 00, 1, 22222222222, 'DENIS H EMAIL', 190580981, 998, '8/12/2024', 'SENHAsenhaSENHA');
+INSERT INTO CONTA VALUES('rogerinho@videogames.com', 00, 0, 12345678910, 'ROGERIO V JOGOS', 1337, 1337, '5/13/2013', '9123dcbb0b42652b0e105956c68d3ca2ff34584f324fa41a29aedd32b883e131');
+INSERT INTO CONTA VALUES('pessoa@provedor.com', 01, 1, 31234284901, 'PESSOA D SILVA', 123123123, 232, '3/2/1999', '9AD46806888CEB90824DDC36AFC7D4448B4252123491AB8DE16A3A117F303191');
+INSERT INTO CONTA VALUES('babyjones@bol.com.br', 01, 2, 11111111111, 'BEBE JONAS', 123124523, 123, '2/4/2050', '56CC8917D573A6E3530B8C0F7E1CD91131679BC9988A05BBE3301ADDB3B8B9E9');
+INSERT INTO CONTA VALUES('denishotmail@hotmail.com', 00, 1, 22222222222, 'DENIS H EMAIL', 190580981, 998, '8/12/2024', '629F700087CEC1A358BEE948511789C3AA491AD26EFF7963A576F086AEB360F8');
 
 INSERT INTO GENERO VALUES ('Terror');
 INSERT INTO GENERO VALUES ('Comedia');
@@ -212,7 +213,7 @@ INSERT INTO GENERO VALUES ('Horror Existencial');
 INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'Roger', '001.jpg', 'UK');
 INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'Roger Infantil', '002.jpg', 'UK');
 INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'ROGER TRISTE', '003.jpg', 'UK');
-INSERT INTO PEFIL VALUES('babyjones@bol.com.br', 'Jonas', '004.jpg', 'Brazil');
+INSERT INTO PERFIL VALUES('babyjones@bol.com.br', 'Jonas', '004.jpg', 'Brazil');
 INSERT INTO PERFIL VALUES('babyjones@bol.com.br', 'Bebe do Jonas', '005.jpg', 'Brazil');
 INSERT INTO PERFIL VALUES('pessoa@provedor.com', 'Pessoa Generica', '006.jpg', 'India');
 INSERT INTO PERFIL VALUES('denishotmail@hotmail.com', 'DENIS', '007.jpg', 'Japan');
