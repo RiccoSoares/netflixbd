@@ -9,11 +9,9 @@ DROP TABLE IF EXISTS CONTEUDO CASCADE;
 DROP TABLE IF EXISTS AUDIO CASCADE;
 DROP TABLE IF EXISTS LEGENDA CASCADE;
 DROP TABLE IF EXISTS AUDIO_LEGENDA CASCADE;
-DROP TABLE IF EXISTS SERIES CASCADE;
 DROP TABLE IF EXISTS TEMPORADAS CASCADE;
 DROP TABLE IF EXISTS EPISODIOS CASCADE;
 DROP TABLE IF EXISTS LEGENDA_AUDIO_EPISODIOS CASCADE;
-DROP TABLE IF EXISTS FILMES CASCADE;
 DROP TABLE IF EXISTS LEGENDA_AUDIO_FILMES CASCADE;
 DROP TABLE IF EXISTS LISTA_PERFIL CASCADE;
 DROP TABLE IF EXISTS MOTIVO_RECOMENDACAO CASCADE;
@@ -79,6 +77,7 @@ CREATE TABLE CONTEUDO
 	ci NUMERIC(2) NOT NULL,
 	visu INT NOT NULL,
 	original BOOLEAN NOT NULL,
+	tipo VARCHAR(5) NOT NULL,--tipicamente 'serie' ou 'filme'
 PRIMARY KEY (id));
 
 CREATE TABLE AUDIO_LEGENDA --tabela contendo arquivos de audio ou de legenda no banco de dados
@@ -87,28 +86,18 @@ CREATE TABLE AUDIO_LEGENDA --tabela contendo arquivos de audio ou de legenda no 
 	descricao VARCHAR(10) NOT NULL, --tipicacamente 'audio' ou 'legenda'
 PRIMARY KEY(arquivo, descricao));
 
-CREATE TABLE FILMES
-	(id_conteudo VARCHAR(30) NOT NULL,
-	arquivo VARCHAR(255) NOT NULL,
-PRIMARY KEY(id_conteudo));
-
 CREATE TABLE LEGENDA_AUDIO_FILMES --tabela que contem as opcoes de audio e legenda para os filmes
-	(id_filme VARCHAR(30) NOT NULL,
-	nome_arquivo VARCHAR(255) NOT NULL UNIQUE,
-PRIMARY KEY(id_filme, nome_arquivo),
-FOREIGN KEY(id_filme) REFERENCES FILMES(id_conteudo) ON DELETE CASCADE,
-FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo) ON DELETE SET NULL); 
-
-CREATE TABLE SERIES
 	(id_conteudo VARCHAR(30) NOT NULL,
-	arquivo VARCHAR(255) NOT NULL,
-PRIMARY KEY(id_conteudo));
+	nome_arquivo VARCHAR(255) NOT NULL UNIQUE,
+PRIMARY KEY(id_conteudo, nome_arquivo),
+FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) ON DELETE CASCADE,
+FOREIGN KEY(nome_arquivo) REFERENCES AUDIO_LEGENDA(arquivo) ON DELETE SET NULL); 
 
 CREATE TABLE TEMPORADAS
 	(id_serie VARCHAR(30) NOT NULL,
 	numero NUMERIC(2) NOT NULL UNIQUE,
 PRIMARY KEY(id_serie, numero),
-FOREIGN KEY(id_serie) REFERENCES SERIES(id_conteudo) ON DELETE CASCADE);
+FOREIGN KEY(id_serie) REFERENCES CONTEUDO(id) ON DELETE CASCADE);
 
 CREATE TABLE EPISODIOS
 	(id_temporada VARCHAR(30) NOT NULL,
@@ -213,7 +202,7 @@ INSERT INTO GENERO VALUES ('Horror Existencial');
 INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'Roger', '001.jpg', 'UK');
 INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'Roger Infantil', '002.jpg', 'UK');
 INSERT INTO PERFIL VALUES('rogerinho@videogames.com', 'ROGER TRISTE', '003.jpg', 'UK');
-INSERT INTO PEFIL VALUES('babyjones@bol.com.br', 'Jonas', '004.jpg', 'Brazil');
+INSERT INTO PERFIL VALUES('babyjones@bol.com.br', 'Jonas', '004.jpg', 'Brazil');
 INSERT INTO PERFIL VALUES('babyjones@bol.com.br', 'Bebe do Jonas', '005.jpg', 'Brazil');
 INSERT INTO PERFIL VALUES('pessoa@provedor.com', 'Pessoa Generica', '006.jpg', 'India');
 INSERT INTO PERFIL VALUES('denishotmail@hotmail.com', 'DENIS', '007.jpg', 'Japan');
@@ -244,13 +233,13 @@ INSERT INTO ATOR VALUES('Ator 3');
 INSERT INTO ATOR VALUES('Ator 4');
 INSERT INTO ATOR VALUES('Ator Querido da Netflix');
 
-INSERT INTO CONTEUDO VALUES('001', 'O Grito', 2004, 'Casa amaldicoada e etc', 'poster01.jpg', 16, 3400, false);
-INSERT INTO CONTEUDO VALUES('002', 'Filme Generico Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre', 'poster02.jpg', 14, 1000000000, true);
-INSERT INTO CONTEUDO VALUES('003', 'Serie Generica Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre, so que serie', 'poster03.jpg', 16, 900000, true);
-INSERT INTO CONTEUDO VALUES('004', 'Serie de Temporadas Curtas', 2015, 'Situacoes dramaticas que se resolvem rapidamente, ate que uma nova temporada seja lancada','poster04.jpg', 16, 500000, false);
-INSERT INTO CONTEUDO VALUES('005', 'Serie de Hospital', 2016, 'Nao sei sobre o que fala, mas muita gente ve', 'poster05.jpg', 12, 1000000, false);
-INSERT INTO CONTEUDO VALUES('006', 'Coragem, o Cao Covarde', 1996, 'Tira o sono de criancas', 'poster06.jpg', 90, 4000, false);
-INSERT INTO CONTEUDO VALUES('007', 'Peixonauta o filme', 2020, '???', 'poster07.jpg', 0, 5999, false);
+INSERT INTO CONTEUDO VALUES('001', 'O Grito', 2004, 'Casa amaldicoada e etc', 'poster01.jpg', 16, 3400, false, 'filme');
+INSERT INTO CONTEUDO VALUES('002', 'Filme Generico Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre', 'poster02.jpg', 14, 1000000000, true, 'filme');
+INSERT INTO CONTEUDO VALUES('003', 'Serie Generica Netflix', 2021, 'Mesmos atores de sempre, mesmo drama de sempre, so que serie', 'poster03.jpg', 16, 900000, true, 'serie');
+INSERT INTO CONTEUDO VALUES('004', 'Serie de Temporadas Curtas', 2015, 'Situacoes dramaticas que se resolvem rapidamente, ate que uma nova temporada seja lancada','poster04.jpg', 16, 500000, false, 'serie');
+INSERT INTO CONTEUDO VALUES('005', 'Serie de Hospital', 2016, 'Nao sei sobre o que fala, mas muita gente ve', 'poster05.jpg', 12, 1000000, false, 'serie');
+INSERT INTO CONTEUDO VALUES('006', 'Coragem, o Cao Covarde', 1996, 'Tira o sono de criancas', 'poster06.jpg', 90, 4000, false, 'filme');
+INSERT INTO CONTEUDO VALUES('007', 'Peixonauta o filme', 2020, '???', 'poster07.jpg', 0, 5999, false, 'filme');
 
 INSERT INTO DO_GENERO VALUES('001', 'Terror');
 INSERT INTO DO_GENERO VALUES('002', 'Comedia Romantica');
@@ -318,11 +307,9 @@ SELECT * FROM DIRETOR;
 SELECT * FROM ATOR;
 SELECT * FROM CONTEUDO;
 SELECT * FROM AUDIO_LEGENDA;
-SELECT * FROM SERIES;
 SELECT * FROM TEMPORADAS;
 SELECT * FROM EPISODIOS;
 SELECT * FROM LEGENDA_AUDIO_EPISODIOS;
-SELECT * FROM FILMES;
 SELECT * FROM LEGENDA_AUDIO_FILMES;
 SELECT * FROM LISTA_PERFIL;
 SELECT * FROM MOTIVO_RECOMENDACAO;
