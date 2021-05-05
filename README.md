@@ -8,6 +8,8 @@ link do arquivo de mapeamento do ER para esquema relacional: https://docs.google
 
 link do ER: http://brmodelo.herokuapp.com/#!/conceptual/60577dbb17fea40033094732
 
+link com arquivo de correcoes pendentes e tarefas:https://docs.google.com/document/d/1nFc_lVXKX_Q-FnUY0rs-emBhmPgEW8lI_qTV6nKPDXU/edit?usp=sharing
+
 
 
 ---------pra rodar (assumindo que voce ja criou uma database de nome netflix no seu postgres):
