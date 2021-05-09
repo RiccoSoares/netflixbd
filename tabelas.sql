@@ -55,7 +55,7 @@ PRIMARY KEY(id));
 CREATE TABLE PERFIL_PREFERE --preferencia do usuario por generos
 	(id_conta VARCHAR(30) NOT NULL,	
 	id_perfil VARCHAR NOT NULL,
-	id_genero VARCHAR(30) NOT NULL,
+	id_genero VARCHAR(7) NOT NULL,
 	ordem NUMERIC(3) NOT NULL,
 PRIMARY KEY(id_conta, id_perfil, id_genero),
 FOREIGN KEY(id_conta, id_perfil) REFERENCES PERFIL(id_conta, id) 
@@ -165,11 +165,11 @@ ON UPDATE CASCADE);
 
 CREATE TABLE DO_GENERO --generos da obra
 	(id_conteudo VARCHAR(30) NOT NULL,
-	genero VARCHAR(30) NOT NULL,
-PRIMARY KEY(id_conteudo, genero),
+	id_genero VARCHAR(7) NOT NULL,
+PRIMARY KEY(id_conteudo, id_genero),
 FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE,
-FOREIGN KEY (genero) REFERENCES GENERO(nome) 
+FOREIGN KEY (id_genero) REFERENCES GENERO(id) 
 ON DELETE CASCADE
 ON UPDATE CASCADE);
 	
