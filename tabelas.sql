@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS CONTEUDO CASCADE;
 DROP TABLE IF EXISTS TEMPORADAS CASCADE;
 DROP TABLE IF EXISTS EPISODIO CASCADE;
 DROP TABLE IF EXISTS LEGENDA_AUDIO CASCADE;
+DROP TABLE IF EXISTS LEGENDA_AUDIO_ASSISTIVEIS CASCADE;
 DROP TABLE IF EXISTS LISTA CASCADE;
 DROP TABLE IF EXISTS MOTIVO_RECOMENDACAO CASCADE;
 DROP TABLE IF EXISTS RECOMENDACOES CASCADE;
@@ -35,7 +36,7 @@ CREATE TABLE  CONTA
 PRIMARY KEY (id));
 
 CREATE TABLE PERFIL
-	(id VARCHAR NOT NULL UNIQUE,
+	(id VARCHAR NOT NULL,
 	id_conta VARCHAR(30) NOT NULL,
 	nome VARCHAR(50) NOT NULL,
 	imagem VARCHAR(255) NOT NULL, --endereco do arquivo de imagem
@@ -106,11 +107,19 @@ FOREIGN KEY(id_assistivel) REFERENCES ASSISTIVEL(id_conteudo),
 FOREIGN KEY(temporada,id_serie) REFERENCES TEMPORADAS(numero,id_serie) 
 ON DELETE CASCADE);
 
-CREATE TABLE LEGENDA_AUDIO --tabela que contem as opcoes de audio e legenda para os assistiveis
+CREATE TABLE LEGENDA_AUDIO --tabela que contem todos os arquivos de legenda ou audio
+	(nome_arquivo VARCHAR(255) NOT NULL UNIQUE,
+	idioma VARCHAR(30) NOT NULL,
+	espec VARCHAR(7) NOT NULL, --tipicamente 'audio' ou 'legenda'
+PRIMARY KEY(nome_arquivo));
+
+CREATE TABLE LEGENDA_AUDIO_ASSISTIVEIS --tabela que contem as opcoes de audio e legenda para os assistiveis
 	(id_conteudo VARCHAR(30) NOT NULL,
 	nome_arquivo VARCHAR(255) NOT NULL UNIQUE,
 PRIMARY KEY(id_conteudo, nome_arquivo),
-FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
+FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id), 
+ON DELETE CASCADE),
+FOREIGN KEY(nome_arquivo) REFERENCES LEGENDA_AUDIO(nome_arquivo) 
 ON DELETE CASCADE);
 
 CREATE TABLE LISTA --lista de conteudos ("para ver depois") de um perfil
