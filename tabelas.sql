@@ -111,6 +111,7 @@ CREATE TABLE LEGENDA_AUDIO --tabela que contem todos os arquivos de legenda ou a
 	nome_arquivo VARCHAR(255) NOT NULL UNIQUE,
 	idioma VARCHAR(30) NOT NULL,
 	espec VARCHAR(7) NOT NULL, --tipicamente 'audio' ou 'legenda'
+CHECK(espec IN('audio', 'legenda')),
 PRIMARY KEY(nome_arquivo),
 FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE);
@@ -159,6 +160,7 @@ CREATE TABLE PARTICIPACAO --trabalhadores da dramaturgia presentes em obra
 	(id_conteudo VARCHAR(30) NOT NULL,
 	id_cineasta VARCHAR(150) NOT NULL,
 	funcao VARCHAR(7) NOT NULL,
+CHECK(funcao IN('ator', 'diretor')),
 PRIMARY KEY(id_conteudo, id_cineasta, funcao),
 FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE,
