@@ -3,24 +3,19 @@ DROP TABLE IF EXISTS CONTA CASCADE;
 DROP TABLE IF EXISTS PERFIL CASCADE;
 DROP TABLE IF EXISTS GENERO CASCADE;
 DROP TABLE IF EXISTS PERFIL_PREFERE CASCADE;
-DROP TABLE IF EXISTS DIRETOR CASCADE;
-DROP TABLE IF EXISTS ATOR CASCADE;
+DROP TABLE IF EXISTS CINEASTA CASCADE;
 DROP TABLE IF EXISTS CONTEUDO CASCADE;
-DROP TABLE IF EXISTS AUDIO CASCADE;
-DROP TABLE IF EXISTS LEGENDA CASCADE;
-DROP TABLE IF EXISTS AUDIO_LEGENDA CASCADE;
 DROP TABLE IF EXISTS TEMPORADAS CASCADE;
-DROP TABLE IF EXISTS EPISODIOS CASCADE;
-DROP TABLE IF EXISTS LEGENDA_AUDIO_EPISODIOS CASCADE;
-DROP TABLE IF EXISTS LEGENDA_AUDIO_FILMES CASCADE;
-DROP TABLE IF EXISTS LISTA_PERFIL CASCADE;
+DROP TABLE IF EXISTS EPISODIO CASCADE;
+DROP TABLE IF EXISTS LEGENDA_AUDIO CASCADE;
+DROP TABLE IF EXISTS LISTA CASCADE;
 DROP TABLE IF EXISTS MOTIVO_RECOMENDACAO CASCADE;
-DROP TABLE IF EXISTS RECOMENDACOES_PERFIL CASCADE;
-DROP TABLE IF EXISTS DISPONIVEL_PARA CASCADE;
-DROP TABLE IF EXISTS ESTRELANDO CASCADE;
+DROP TABLE IF EXISTS RECOMENDACOES CASCADE;
+DROP TABLE IF EXISTS REGIOES_DISPONIVEIS CASCADE;
+DROP TABLE IF EXISTS PARTICIPACAO CASCADE;
 DROP TABLE IF EXISTS DO_GENERO CASCADE;
-DROP TABLE IF EXISTS DIRIGIDO_POR CASCADE;
 DROP TABLE IF EXISTS ASSISTIR CASCADE;
+DROP TABLE IF EXISTS ASSISTIVEL CASCADE;
 
 CREATE TABLE REGIAO
 	(nome VARCHAR(200) NOT NULL,
@@ -53,9 +48,9 @@ FOREIGN KEY(regiao) REFERENCES REGIAO(nome)
 ON DELETE SET NULL);
 
 CREATE TABLE GENERO
-	(id  VARCHAR(7)
+	(id  VARCHAR(7),
 	nome VARCHAR(30) UNIQUE,
-PRIMARY KEY(nome));
+PRIMARY KEY(id));
 
 CREATE TABLE PERFIL_PREFERE --preferencia do usuario por generos
 	(id_conta VARCHAR(30) NOT NULL,	
@@ -71,7 +66,7 @@ ON DELETE CASCADE
 ON UPDATE CASCADE);
  
 CREATE TABLE CINEASTA
-	(id VARCHAR(30)
+	(id VARCHAR(30),
 	nome VARCHAR(150) NOT NULL,
 PRIMARY KEY (id));
 
@@ -83,25 +78,32 @@ CREATE TABLE CONTEUDO
 	poster VARCHAR(255) NOT NULL UNIQUE,
 	ci NUMERIC(2) NOT NULL,
 	original BOOLEAN NOT NULL,
-	tipo VARCHAR(5) NOT NULL,--tipicamente 'serie', 'filme' ou 'episodio'
-CONSTRAINT chck_type CHECK(tipo IN('serie', 'filme', 'episodio')),
+	tipo VARCHAR(8) NOT NULL,--tipicamente 'serie', 'filme' ou 'episodio'
+CHECK(tipo IN('serie', 'filme', 'episodio')),
 PRIMARY KEY (id));
 
 CREATE TABLE ASSISTIVEL
 	(id_conteudo VARCHAR(30) NOT NULL,
-	tipo_conteudo VARCHAR(
 	arquivo	VARCHAR(255) NOT NULL UNIQUE,
 	visualizacoes INT,
 PRIMARY KEY(id_conteudo),
 FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id));
 
+CREATE TABLE TEMPORADAS
+	(id_serie VARCHAR(30) NOT NULL,
+	numero NUMERIC(3) NOT NULL,
+PRIMARY KEY(id_serie, numero),
+FOREIGN KEY(id_serie) REFERENCES CONTEUDO(id) 
+ON DELETE CASCADE);
+
 CREATE TABLE EPISODIO
 	(id_assistivel VARCHAR(30) NOT NULL,
 	temporada NUMERIC(3) NOT NULL,
+	id_serie VARCHAR(30) NOT NULL,
 	numero NUMERIC(3) NOT NULL,
-PRIMARY KEY(id_assistivel),
-FOREIGN KEY(id_assistivel) REFERENCES ASSISTIVEL(id_conteudo) 
-FOREIGN KEY(temporada) REFERENCES TEMPORADAS(numero) 
+PRIMARY KEY(id_serie,temporada,numero),
+FOREIGN KEY(id_assistivel) REFERENCES ASSISTIVEL(id_conteudo), 
+FOREIGN KEY(temporada,id_serie) REFERENCES TEMPORADAS(numero,id_serie) 
 ON DELETE CASCADE);
 
 CREATE TABLE LEGENDA_AUDIO --tabela que contem as opcoes de audio e legenda para os assistiveis
@@ -111,94 +113,78 @@ PRIMARY KEY(id_conteudo, nome_arquivo),
 FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE);
 
-CREATE TABLE TEMPORADAS
-	(id_serie VARCHAR(30) NOT NULL,
-	numero NUMERIC(2) NOT NULL,
-PRIMARY KEY(id_serie, numero),
-FOREIGN KEY(id_serie) REFERENCES CONTEUDO(id) 
-ON DELETE CASCADE);
-
-CREATE TABLE LISTA_PERFIL --lista de conteudos ("para ver depois") de um perfil
+CREATE TABLE LISTA --lista de conteudos ("para ver depois") de um perfil
 	(id_conta VARCHAR(30) NOT NULL,
-	perfil VARCHAR(50) NOT NULL,
+	id_perfil VARCHAR NOT NULL,
 	id_conteudo VARCHAR(30) NOT NULL,
-PRIMARY KEY(id_conta, perfil, id_conteudo),
-FOREIGN KEY(id_conta, perfil) REFERENCES PERFIL(id_conta, nome) 
+PRIMARY KEY(id_conta, id_perfil, id_conteudo),
+FOREIGN KEY(id_conta, id_perfil) REFERENCES PERFIL(id_conta, id) 
 ON DELETE CASCADE
 ON UPDATE CASCADE,
 FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE);
 
----- REVISADO ATE AQUI
-
 CREATE TABLE MOTIVO_RECOMENDACAO --tabela de motivos pre-especificados pelos quais um conteudo pode ser recomendado a um usuario
 	(motivo VARCHAR(50) NOT NULL,
 PRIMARY KEY(motivo));
 
-CREATE TABLE RECOMENDACOES_PERFIL --tabela de conteudos recomendados especificamente para um perfil
-	(email_perfil VARCHAR(254) NOT NULL,
-	nome_perfil VARCHAR(50) NOT NULL,
+CREATE TABLE RECOMENDACOES --tabela de conteudos recomendados especificamente para um perfil
+	(id_conta VARCHAR(30) NOT NULL,
+	id_perfil VARCHAR NOT NULL,
 	id_conteudo VARCHAR(30) NOT NULL,
 	motivo VARCHAR(30) NOT NULL,
-PRIMARY KEY(email_perfil, nome_perfil, id_conteudo),
-FOREIGN KEY(email_perfil, nome_perfil) REFERENCES PERFIL(email_conta, nome) 
+PRIMARY KEY(id_conta, id_perfil, id_conteudo, motivo),
+FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
+FOREIGN KEY(id_conta, id_perfil) REFERENCES PERFIL(id_conta, id) 
 ON DELETE CASCADE,
 FOREIGN KEY(motivo) REFERENCES MOTIVO_RECOMENDACAO(motivo) 
 ON DELETE CASCADE
 ON UPDATE CASCADE);
 	
-CREATE TABLE DISPONIVEL_PARA --disponibilidade de obra em regioes
-	(conteudo_id VARCHAR(30) NOT NULL,
-	regiao_nome VARCHAR(200) NOT NULL,
-PRIMARY KEY(conteudo_id, regiao_nome),
-FOREIGN KEY(conteudo_id) REFERENCES CONTEUDO(id) 
+CREATE TABLE REGIOES_DISPONIVEIS --disponibilidade de obra em regioes
+	(id_conteudo VARCHAR(30) NOT NULL,
+	regiao VARCHAR(200) NOT NULL,
+PRIMARY KEY(id_conteudo, regiao),
+FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE,
-FOREIGN KEY(regiao_nome) REFERENCES REGIAO(nome) 
+FOREIGN KEY(regiao) REFERENCES REGIAO(nome) 
 ON DELETE CASCADE);
 
-CREATE TABLE ESTRELANDO --atores presentes em obra
-	(conteudo_id VARCHAR(30) NOT NULL,
-	ator_nome VARCHAR(150) NOT NULL,
-PRIMARY KEY(conteudo_id, ator_nome),
-FOREIGN KEY(conteudo_id) REFERENCES CONTEUDO(id) 
+CREATE TABLE PARTICIPACAO --trabalhadores da dramaturgia presentes em obra
+	(id_conteudo VARCHAR(30) NOT NULL,
+	id_cineasta VARCHAR(150) NOT NULL,
+	funcao VARCHAR(7) NOT NULL,
+PRIMARY KEY(id_conteudo, id_cineasta, funcao),
+FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE,
-FOREIGN KEY(ator_nome) REFERENCES ATOR(nome) 
+FOREIGN KEY(id_cineasta) REFERENCES CINEASTA(id) 
 ON DELETE CASCADE
 ON UPDATE CASCADE);
 
 CREATE TABLE DO_GENERO --generos da obra
-	(conteudo_id VARCHAR(30) NOT NULL,
-	genero_nome VARCHAR(30) NOT NULL,
-PRIMARY KEY(conteudo_id, genero_nome),
-FOREIGN KEY(conteudo_id) REFERENCES CONTEUDO(id) 
+	(id_conteudo VARCHAR(30) NOT NULL,
+	genero VARCHAR(30) NOT NULL,
+PRIMARY KEY(id_conteudo, genero),
+FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE,
-FOREIGN KEY (genero_nome) REFERENCES GENERO(nome) 
-ON DELETE CASCADE
-ON UPDATE CASCADE);
-
-CREATE TABLE DIRIGIDO_POR --diretores da obra
-	(conteudo_id VARCHAR(30) NOT NULL,
-	nome_diretor VARCHAR(150) NOT NULL,
-PRIMARY KEY(conteudo_id, nome_diretor),
-FOREIGN KEY(conteudo_id) REFERENCES CONTEUDO(id) 
-ON DELETE CASCADE,
-FOREIGN KEY(nome_diretor) REFERENCES DIRETOR(nome) 
+FOREIGN KEY (genero) REFERENCES GENERO(nome) 
 ON DELETE CASCADE
 ON UPDATE CASCADE);
 	
 CREATE TABLE ASSISTIR 
-	(email_conta VARCHAR(254) NOT NULL,
-	perfil	VARCHAR(50) NOT NULL,
-	conteudo_id VARCHAR(30) NOT NULL,
-	assitido_comp BOOLEAN NOT NULL,
-	feedback CHAR(8), --tipicamente assume os valores "positivo" ou "negativo"
-	ultimo_ep_visto CHAR(6),
-	no_tempo NUMERIC(4),
+	(id_conta VARCHAR(254) NOT NULL,
+	id_perfil VARCHAR(50) NOT NULL,
+	id_conteudo VARCHAR(30) NOT NULL,
+	assitido BOOLEAN NOT NULL,
+	avaliacao CHAR(8), --tipicamente assume os valores "positivo" ou "negativo"
+	tempo_assistido NUMERIC(4),
 	relevancia NUMERIC(100),
-CONSTRAINT chck_feedback CHECK( feedback IN ('positivo', 'negativo')),
-PRIMARY KEY(email_conta, perfil, conteudo_id),
-FOREIGN KEY(email_conta, perfil) REFERENCES PERFIL(email_conta, nome) 
+CHECK(avaliacao IN ('positivo', 'negativo')),
+PRIMARY KEY(id_conta, id_perfil, id_conteudo),
+FOREIGN KEY(id_conta, id_perfil) REFERENCES PERFIL(id_conta, id) 
 ON DELETE CASCADE
 ON UPDATE CASCADE,
-FOREIGN KEY(conteudo_id) REFERENCES CONTEUDO(id) 
+FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE);
