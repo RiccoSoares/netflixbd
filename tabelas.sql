@@ -129,6 +129,8 @@ ON UPDATE CASCADE,
 FOREIGN KEY(id_conteudo) REFERENCES CONTEUDO(id) 
 ON DELETE CASCADE);
 
+---- REVISADO ATE AQUI
+
 CREATE TABLE MOTIVO_RECOMENDACAO --tabela de motivos pre-especificados pelos quais um conteudo pode ser recomendado a um usuario
 	(motivo VARCHAR(50) NOT NULL,
 PRIMARY KEY(motivo));
