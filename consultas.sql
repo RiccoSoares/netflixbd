@@ -28,7 +28,7 @@ where EPISODIO.numero in(
 	where id_serie = SER.id
 );
 
--- (4) TODOS os usuarios que possuem na sua lista de generos prediletos o genero "Comedia" e nao possuem o genero "Comedia Romantica" entre os mesmos.
+-- (4) todos os usuarios que possuem na sua lista de generos prediletos o genero "Comedia" e nao possuem o genero "Comedia Romantica" entre os mesmos.
 select nome from perfil p1 where 'Comedia' in 
 	(select genero.nome from perfil join perfil_prefere on p1.id = perfil_prefere.id_perfil join genero on id_genero = genero.id)
 	and
@@ -63,5 +63,18 @@ join REGIOES_DISPONIVEIS on REGIOES_DISPONIVEIS.regiao = REGIAO.nome
 group by REGIAO.NOME
 order by count(distinct PERFIL.id) DESC;
 
--- cineastas que participaram de series
---select series_visu.nome, cineasta.nome from series_visu join participacao on series_visu.id = participacao.id_conteudo;
+
+-- (9) Número de visualizações por ator, com número de conteúdos que participou
+select CINEASTA.NOME,sum(visualizacoes) as visualizacoes,
+count(distinct CONTEUDO.id) as nro_conteudos
+from CINEASTA join PARTICIPACAO on CINEASTA.id = PARTICIPACAO.id_cineasta
+join CONTEUDO on CONTEUDO.id = PARTICIPACAO.id_conteudo
+join ASSISTIVEL on CONTEUDO.id = ASSISTIVEL.id_conteudo
+group by CINEASTA.NOME,PARTICIPACAO.funcao,CONTEUDO.tipo
+having PARTICIPACAO.funcao = 'ator' and CONTEUDO.tipo IN('filme','serie');
+
+-- (10) Numero de regioes disponiveis, ops de audio para cada conteudo.
+select conteudo.nome, count(distinct(regiao)), count(distinct(espec)) from regioes_disponiveis 
+join conteudo on conteudo.id = regioes_disponiveis.id_conteudo natural join legenda_audio where espec = 'audio' group by conteudo.nome;
+
+
