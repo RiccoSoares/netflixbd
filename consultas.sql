@@ -73,8 +73,14 @@ join ASSISTIVEL on CONTEUDO.id = ASSISTIVEL.id_conteudo
 group by CINEASTA.NOME,PARTICIPACAO.funcao,CONTEUDO.tipo
 having PARTICIPACAO.funcao = 'ator' and CONTEUDO.tipo IN('filme','serie');
 
--- (10) Numero de regioes disponiveis, ops de audio para cada conteudo.
-select conteudo.nome, count(distinct(regiao)), count(distinct(espec)) from regioes_disponiveis 
-join conteudo on conteudo.id = regioes_disponiveis.id_conteudo natural join legenda_audio where espec = 'audio' group by conteudo.nome;
 
-
+-- (10) Numero de regioes disponiveis, ops de audio para cada conteudo e de legenda para cada conteudo..
+select CONTEUDO.nome, count(REGIOES_DISPONIVEIS.regiao) as regioes, 
+count(distinct LEGENDA.idioma) as legendas, count(distinct AUDIO.idioma) as audios
+from CONTEUDO left outer join REGIOES_DISPONIVEIS 
+on CONTEUDO.id = REGIOES_DISPONIVEIS.id_conteudo
+left outer join LEGENDA_AUDIO as LEGENDA on CONTEUDO.id = LEGENDA.id_conteudo 
+and LEGENDA.espec = 'legenda'
+left outer join LEGENDA_AUDIO as AUDIO on CONTEUDO.id = AUDIO.id_conteudo
+and AUDIO.espec = 'audio'
+group by CONTEUDO.nome,LEGENDA.espec,AUDIO.espec;
