@@ -14,7 +14,7 @@ link com arquivo de correcoes pendentes e tarefas:https://docs.google.com/docume
 
 link pra modelagem ER: http://brmodelo.herokuapp.com/#!/conceptual/60577dbb17fea40033094732
 
---------INFOS DO PROGRAMA.PY
+## INFOS DO PROGRAMA.PY
 
 rodar com usuario postgres
 
