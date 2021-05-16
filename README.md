@@ -10,17 +10,14 @@ link do arquivo de mapeamento do ER para esquema relacional: https://docs.google
 
 link do ER (acesso restrito): http://brmodelo.herokuapp.com/#!/conceptual/60577dbb17fea40033094732
 
-## INFOS DO PROGRAMA.PY
-
-rodar com usuario postgres
-
-depende dos módulos psycopg2 e tabulate (disp. em pip)
-
 
 ---------pra rodar (assumindo que voce ja criou uma database de nome netflix no seu postgres):
 
-psql -d netflix -a -f netflix.sql
+psql -d netflix -a -f tabelas.sql
 
+psql -d netflix -a -f instancias.sql
+
+psql -d netflix -a -f consultas.sql
 
 ---------para acessar a database no postgres
 
@@ -29,6 +26,12 @@ sudo -i -u postgres
 psql netflix 
 
 \dt (checar as tabelas existentes)
+
+## INFOS DO PROGRAMA.PY
+
+rodar com usuario postgres
+
+depende dos módulos psycopg2 e tabulate (disp. em pip)
 
 --------para usar o programa python que realiza acesso às consultas
 
