@@ -19,7 +19,7 @@ and CONTEUDO.tipo = 'filme'
 join PARTICIPACAO on CONTEUDO.id = PARTICIPACAO.id_conteudo 
 join CINEASTA on CINEASTA.id = PARTICIPACAO.id_cineasta 
 and CINEASTA.nome = 'Ari Aster'
-order by ASSISTIVEL.visualizacoes
+order by ASSISTIVEL.visualizacoes;
 
 -- (2) o numero de cada perfil seguido do numero de generos que ele possui em sua lista de generos preferidos
 select perfil.nome, count(genero.nome) from perfil join perfil_prefere on perfil.id = perfil_prefere.id_perfil join genero on id_genero = genero.id group by perfil.nome;
