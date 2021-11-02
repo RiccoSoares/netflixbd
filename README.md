@@ -1,5 +1,5 @@
 # netflixbd
-netflix banco de dados
+Banco de dados inspirado na plataforma Netflix.
 
 
 link do arquivo do drive pro dicionário de dados: https://docs.google.com/document/d/1cuHeuuIBba-cCXUPkDS1CO6ALoYwvFp515ENGTuSAAg/edit?usp=sharing
