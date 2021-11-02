@@ -2,11 +2,11 @@
 Banco de dados inspirado na plataforma Netflix.
 
 
-link do arquivo do drive pro dicionário de dados: https://docs.google.com/document/d/1cuHeuuIBba-cCXUPkDS1CO6ALoYwvFp515ENGTuSAAg/edit?usp=sharing
+Dicionário de dados disponível em: dicionário de dados.pdf
 
-link do arquivo de descricao do UDD: https://docs.google.com/document/d/1o0H_ax0n37PNIbt2h7tFCNJJLoA9bdqPzhI90dgpVWw/edit?usp=sharing
+Descricao do Universo de Discurso disponível em: descrição do UDD.pdf
 
-link do arquivo de mapeamento do ER para esquema relacional: https://docs.google.com/document/d/1rOPIBeUVcgHCVApGSOLFYWbj70fV2d6h8P92bxcfB-A/edit?usp=sharing
+Mapeamento do diagrama ER para esquema relacional disponível em: mapeamento.pdf
 
 link do ER (acesso restrito): http://brmodelo.herokuapp.com/#!/conceptual/60577dbb17fea40033094732
 
