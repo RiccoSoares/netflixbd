@@ -1,6 +1,9 @@
 # netflixbd
 Banco de dados inspirado na plataforma Netflix. É possível construir a base de dados (com nossos exemplos fictícios) e elaborar consultas relevantes usando Python3 ou PostgreSQL.
 
+![image](https://user-images.githubusercontent.com/52585330/140199265-ba1f33fa-6fe4-424e-9e99-2641d709a801.png)
+
+
 ## Diagrama ER
 ![image](https://user-images.githubusercontent.com/52585330/139956670-895383f7-2a2b-4881-b3b8-88277904e58e.png)
 
